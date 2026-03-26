@@ -321,7 +321,7 @@ const ArticlesPage = {
                         </span>
                         <span class="word-count">
                             <i data-lucide="type"></i>
-                            ${article.word_count || 0} 字
+                            ${article.wordcount || article.word_count || 0} 字
                         </span>
                     </div>
                     <div class="article-footer">
