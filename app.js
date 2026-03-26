@@ -4,7 +4,7 @@
 
 // Supabase 配置
 const SUPABASE_URL = 'https://vysmewebafmoaatsqxtc.supabase.co';
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ5c21ld2ViYWZtb2FhdHNxeHRjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDIyODY1MTUsImV4cCI6MjA1Nzg2MjUxNX0.E6wC1xTB5fGC6-uhzJTA3YYG6W3wP3OWv6OuAQpGvl8';
+const SUPABASE_KEY = 'sb_publishable_iiTKpO8PmynFxiV74Oq-KA_FBugqEo0';
 
 // 初始化 Supabase
 const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
