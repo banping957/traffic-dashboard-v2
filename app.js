@@ -205,47 +205,56 @@ const CalendarManager = {
  * 文章数据管理器
  */
 const ArticleManager = {
+    SUPABASE_URL: 'https://vysmewebafmoaatsqxtc.supabase.co',
+    SUPABASE_KEY: 'sb_publishable_iiTKpO8PmynFxiV74Oq-KA_FBugqEo0',
+    
     async loadStats() {
         try {
             // 获取文章总数
-            const { count: totalCount, error: totalError } = await supabase
-                .from('articles')
-                .select('*', { count: 'exact', head: true });
-            
-            if (totalError) throw totalError;
+            const countResponse = await fetch(`${this.SUPABASE_URL}/rest/v1/articles?select=count`, {
+                headers: {
+                    'apikey': this.SUPABASE_KEY,
+                    'Authorization': `Bearer ${this.SUPABASE_KEY}`
+                }
+            });
+            const countData = await countResponse.json();
+            const totalCount = countData[0]?.count || 0;
             
             // 获取今日文章数
             const today = new Date().toISOString().split('T')[0];
-            const { count: todayCount, error: todayError } = await supabase
-                .from('articles')
-                .select('*', { count: 'exact', head: true })
-                .eq('date', today);
-            
-            if (todayError) throw todayError;
+            const todayResponse = await fetch(`${this.SUPABASE_URL}/rest/v1/articles?select=count&date=eq.${today}`, {
+                headers: {
+                    'apikey': this.SUPABASE_KEY,
+                    'Authorization': `Bearer ${this.SUPABASE_KEY}`
+                }
+            });
+            const todayData = await todayResponse.json();
+            const todayCount = todayData[0]?.count || 0;
             
             // 获取本周文章数
             const weekStart = new Date();
             weekStart.setDate(weekStart.getDate() - weekStart.getDay());
-            const { count: weekCount, error: weekError } = await supabase
-                .from('articles')
-                .select('*', { count: 'exact', head: true })
-                .gte('date', weekStart.toISOString().split('T')[0]);
-            
-            if (weekError) throw weekError;
+            const weekResponse = await fetch(`${this.SUPABASE_URL}/rest/v1/articles?select=count&date=gte.${weekStart.toISOString().split('T')[0]}`, {
+                headers: {
+                    'apikey': this.SUPABASE_KEY,
+                    'Authorization': `Bearer ${this.SUPABASE_KEY}`
+                }
+            });
+            const weekData = await weekResponse.json();
+            const weekCount = weekData[0]?.count || 0;
             
             // 更新显示
-            document.getElementById('totalCount').textContent = totalCount || 0;
-            document.getElementById('todayCount').textContent = todayCount || 0;
-            document.getElementById('weekCount').textContent = weekCount || 0;
-            document.getElementById('articleCount').textContent = totalCount || 0;
+            document.getElementById('totalCount').textContent = totalCount;
+            document.getElementById('todayCount').textContent = todayCount;
+            document.getElementById('weekCount').textContent = weekCount;
+            document.getElementById('articleCount').textContent = totalCount;
             
         } catch (error) {
             console.error('加载统计数据失败:', error);
-            // 使用模拟数据
-            document.getElementById('totalCount').textContent = '156';
-            document.getElementById('todayCount').textContent = '2';
-            document.getElementById('weekCount').textContent = '12';
-            document.getElementById('articleCount').textContent = '156';
+            document.getElementById('totalCount').textContent = '0';
+            document.getElementById('todayCount').textContent = '0';
+            document.getElementById('weekCount').textContent = '0';
+            document.getElementById('articleCount').textContent = '0';
         }
     },
     
@@ -254,13 +263,18 @@ const ArticleManager = {
         if (!container) return;
         
         try {
-            const { data: articles, error } = await supabase
-                .from('articles')
-                .select('*')
-                .order('date', { ascending: false })
-                .limit(5);
+            const response = await fetch(`${this.SUPABASE_URL}/rest/v1/articles?select=*&order=date.desc&limit=5`, {
+                headers: {
+                    'apikey': this.SUPABASE_KEY,
+                    'Authorization': `Bearer ${this.SUPABASE_KEY}`
+                }
+            });
             
-            if (error) throw error;
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}`);
+            }
+            
+            const articles = await response.json();
             
             if (!articles || articles.length === 0) {
                 container.innerHTML = '<div class="empty-state">暂无文章</div>';
@@ -268,11 +282,11 @@ const ArticleManager = {
             }
             
             container.innerHTML = articles.map(article => this.createArticleCard(article)).join('');
+            lucide.createIcons();
             
         } catch (error) {
             console.error('加载文章失败:', error);
-            // 使用模拟数据
-            container.innerHTML = this.getMockArticles();
+            container.innerHTML = '<div class="empty-state" style="color: #ef4444;">加载失败</div>';
         }
     },
     
