@@ -260,7 +260,12 @@ const ArticleManager = {
     
     async loadRecentArticles() {
         const container = document.getElementById('recentArticles');
-        if (!container) return;
+        if (!container) {
+            console.log('recentArticles container not found');
+            return;
+        }
+        
+        console.log('Loading recent articles...');
         
         try {
             const response = await fetch(`${this.SUPABASE_URL}/rest/v1/articles?select=*&order=date.desc&limit=5`, {
@@ -270,11 +275,14 @@ const ArticleManager = {
                 }
             });
             
+            console.log('Response status:', response.status);
+            
             if (!response.ok) {
                 throw new Error(`HTTP ${response.status}`);
             }
             
             const articles = await response.json();
+            console.log('Loaded articles:', articles.length);
             
             if (!articles || articles.length === 0) {
                 container.innerHTML = '<div class="empty-state">暂无文章</div>';
@@ -286,7 +294,7 @@ const ArticleManager = {
             
         } catch (error) {
             console.error('加载文章失败:', error);
-            container.innerHTML = '<div class="empty-state" style="color: #ef4444;">加载失败</div>';
+            container.innerHTML = `<div class="empty-state" style="color: #ef4444;">加载失败: ${error.message}</div>`;
         }
     },
     
