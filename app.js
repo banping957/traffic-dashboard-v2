@@ -2,6 +2,8 @@
  * OpenClaw Dashboard v2 - 主应用脚本
  */
 
+console.log('app.js loaded');
+
 // Supabase 配置
 const SUPABASE_URL = 'https://vysmewebafmoaatsqxtc.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_iiTKpO8PmynFxiV74Oq-KA_FBugqEo0';
@@ -385,6 +387,7 @@ const ArticleManager = {
  * 初始化应用
  */
 document.addEventListener('DOMContentLoaded', () => {
+    console.log('DOMContentLoaded triggered');
     // 初始化图标
     lucide.createIcons();
     
@@ -395,8 +398,10 @@ document.addEventListener('DOMContentLoaded', () => {
     CalendarManager.init();
     
     // 加载数据
+    console.log('Loading data...');
     ArticleManager.loadStats();
     ArticleManager.loadRecentArticles();
+    console.log('Data loading triggered');
     
     // 新建文章按钮
     document.getElementById('newArticleBtn')?.addEventListener('click', () => {
