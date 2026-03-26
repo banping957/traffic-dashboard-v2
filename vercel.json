@@ -1,13 +1,16 @@
 {
   "version": 2,
-  "name": "traffic-dashboard",
   "builds": [
     {
-      "src": "index.html",
+      "src": "**/*.html",
       "use": "@vercel/static"
     },
     {
-      "src": "articles/**/*",
+      "src": "**/*.css",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "**/*.js",
       "use": "@vercel/static"
     },
     {
@@ -31,10 +34,6 @@
     {
       "src": "/api/articles",
       "dest": "/api/articles.js"
-    },
-    {
-      "src": "/articles/(.*)",
-      "dest": "/articles/$1"
     },
     {
       "src": "/(.*)",
