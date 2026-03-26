@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>素材库 - OpenClaw</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="materials.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+</head>
+<body>
+    <!-- 侧边导航栏 -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <i data-lucide="feather" class="logo-icon"></i>
+                <span class="logo-text">OpenClaw</span>
+            </div>
+            <button class="sidebar-toggle" id="sidebarToggle">
+                <i data-lucide="chevron-left"></i>
+            </button>
+        </div>
+        
+        <nav class="sidebar-nav">
+            <ul class="nav-list">
+                <li class="nav-item">
+                    <a href="index.html" class="nav-link">
+                        <i data-lucide="layout-dashboard"></i>
+                        <span class="nav-text">工作台</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="articles.html" class="nav-link">
+                        <i data-lucide="file-text"></i>
+                        <span class="nav-text">文章管理</span>
+                    </a>
+                </li>
+                <li class="nav-item active">
+                    <a href="materials.html" class="nav-link">
+                        <i data-lucide="image"></i>
+                        <span class="nav-text">素材库</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="todos.html" class="nav-link">
+                        <i data-lucide="check-square"></i>
+                        <span class="nav-text">待办事项</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="calendar.html" class="nav-link">
+                        <i data-lucide="calendar"></i>
+                        <span class="nav-text">发布日历</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+        
+        <div class="sidebar-footer">
+            <div class="user-info">
+                <div class="user-avatar">
+                    <span>K</span>
+                </div>
+                <div class="user-details">
+                    <span class="user-name">Kimi Claw</span>
+                    <span class="user-role">创作者</span>
+                </div>
+            </div>
+            <button class="theme-toggle" id="themeToggle" title="切换主题">
+                <i data-lucide="sun" class="theme-icon-light"></i>
+                <i data-lucide="moon" class="theme-icon-dark"></i>
+            </button>
+        </div>
+    </aside>
+
+    <!-- 主内容区 -->
+    <main class="main-content">
+        <!-- 顶部栏 -->
+        <header class="top-bar">
+            <div class="top-bar-left">
+                <button class="mobile-menu-toggle" id="mobileMenuToggle">
+                    <i data-lucide="menu"></i>
+                </button>
+                <h1 class="page-title">素材库</h1>
+            </div>
+            <div class="top-bar-right">
+                <button class="btn btn-primary btn-new" id="uploadBtn">
+                    <i data-lucide="upload"></i>
+                    <span>上传素材</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- 内容区域 -->
+        <div class="content-wrapper">
+            <!-- 统计栏 -->
+            <section class="materials-stats">
+                <div class="stats-row">
+                    <div class="stat-item">
+                        <i data-lucide="image"></i>
+                        <div class="stat-info">
+                            <span class="stat-value" id="totalMaterials">0</span>
+                            <span class="stat-label">图片素材</span>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-item">
+                        <i data-lucide="hard-drive"></i>
+                        <div class="stat-info">
+                            <span class="stat-value" id="totalSize">0 MB</span>
+                            <span class="stat-label">占用空间</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 素材网格 -->
+            <section class="materials-grid" id="materialsGrid">
+                <div class="loading-state">
+                    <i data-lucide="loader-2" class="spin"></i>
+                    <span>加载素材中...</span>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- 移动端遮罩 -->
+    <div class="mobile-overlay" id="mobileOverlay"></div>
+
+    <!-- 图片预览弹窗 -->
+    <div class="modal image-preview-modal" id="imagePreviewModal">
+        <div class="modal-overlay"></div>
+        <div class="modal-content">
+            <button class="preview-close" id="closePreview">
+                <i data-lucide="x"></i>
+            </button>
+            <img id="previewImage" src="" alt="预览">
+            <div class="preview-actions">
+                <button class="btn btn-primary" id="copyImageUrl">
+                    <i data-lucide="link"></i>
+                    <span>复制链接</span>
+                </button>
+                <button class="btn btn-secondary" id="downloadImage">
+                    <i data-lucide="download"></i>
+                    <span>下载</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast 通知 -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script src="app.js"></script>
+    <script src="materials.js"></script>
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>

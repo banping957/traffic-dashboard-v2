@@ -1,0 +1,291 @@
+/* ========================================
+   文章详情页专用样式
+   ======================================== */
+
+/* 返回链接 */
+.back-link {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: 0.9375rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    transition: color var(--transition-fast);
+}
+
+.back-link:hover {
+    color: var(--primary-600);
+}
+
+.back-link svg {
+    width: 18px;
+    height: 18px;
+}
+
+/* 详情页布局 */
+.article-detail-layout {
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    gap: var(--space-6);
+}
+
+/* 左侧信息面板 */
+.article-info-panel {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+}
+
+.info-card {
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-xl);
+    padding: var(--space-5);
+}
+
+.info-card h3 {
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: var(--space-4);
+    padding-bottom: var(--space-3);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.info-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+}
+
+.info-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 0.875rem;
+}
+
+.info-label {
+    color: var(--text-tertiary);
+}
+
+.info-value {
+    color: var(--text-primary);
+    font-weight: 500;
+}
+
+/* 时间线 */
+.timeline {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+}
+
+.timeline-item {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-3);
+}
+
+.timeline-dot {
+    width: 10px;
+    height: 10px;
+    background: var(--primary-500);
+    border-radius: 50%;
+    margin-top: 4px;
+    flex-shrink: 0;
+}
+
+.timeline-content {
+    flex: 1;
+}
+
+.timeline-title {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    margin-bottom: 2px;
+}
+
+.timeline-time {
+    font-size: 0.75rem;
+    color: var(--text-tertiary);
+}
+
+/* 快捷操作 */
+.actions-card .quick-actions {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+}
+
+.action-btn {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-3) var(--space-4);
+    border-radius: var(--radius-lg);
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    transition: all var(--transition-fast);
+}
+
+.action-btn:hover {
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+}
+
+.action-btn svg {
+    width: 18px;
+    height: 18px;
+}
+
+.action-btn.danger {
+    color: var(--error-600);
+}
+
+.action-btn.danger:hover {
+    background: var(--error-50);
+}
+
+/* 右侧预览面板 */
+.article-preview-panel {
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.preview-header {
+    padding: var(--space-5) var(--space-6);
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: var(--space-4);
+}
+
+.preview-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.preview-tabs {
+    display: flex;
+    align-items: center;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+}
+
+.preview-tab {
+    padding: var(--space-2) var(--space-4);
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    transition: all var(--transition-fast);
+}
+
+.preview-tab:hover {
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+}
+
+.preview-tab.active {
+    background: var(--primary-50);
+    color: var(--primary-600);
+}
+
+/* 预览内容区 */
+.preview-content {
+    flex: 1;
+    overflow: auto;
+}
+
+.wechat-preview,
+.raw-preview {
+    display: none;
+    padding: var(--space-6);
+    min-height: 500px;
+}
+
+.wechat-preview.active,
+.raw-preview.active {
+    display: block;
+}
+
+/* 公众号文章样式 */
+.wechat-article {
+    max-width: 680px;
+    margin: 0 auto;
+    background: white;
+    padding: 40px 30px;
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-sm);
+}
+
+/* 原始代码预览 */
+.raw-code {
+    background: var(--gray-900);
+    color: var(--gray-100);
+    padding: var(--space-5);
+    border-radius: var(--radius-lg);
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    line-height: 1.7;
+    overflow-x: auto;
+    white-space: pre-wrap;
+    word-break: break-all;
+}
+
+/* 删除警告 */
+.delete-warning {
+    font-size: 0.9375rem;
+    color: var(--text-secondary);
+    text-align: center;
+    padding: var(--space-4);
+}
+
+/* 危险按钮 */
+.btn-danger {
+    background: var(--error-600);
+    color: white;
+}
+
+.btn-danger:hover {
+    background: var(--error-700);
+}
+
+/* 响应式 */
+@media (max-width: 1024px) {
+    .article-detail-layout {
+        grid-template-columns: 1fr;
+    }
+    
+    .article-info-panel {
+        order: 2;
+    }
+    
+    .article-preview-panel {
+        order: 1;
+    }
+}
+
+@media (max-width: 768px) {
+    .preview-header {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .preview-tabs {
+        justify-content: center;
+    }
+    
+    .wechat-article {
+        padding: 20px;
+    }
+}

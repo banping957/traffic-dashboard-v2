@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>文章详情 - OpenClaw</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="article-detail.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+</head>
+<body>
+    <!-- 侧边导航栏 -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <i data-lucide="feather" class="logo-icon"></i>
+                <span class="logo-text">OpenClaw</span>
+            </div>
+            <button class="sidebar-toggle" id="sidebarToggle">
+                <i data-lucide="chevron-left"></i>
+            </button>
+        </div>
+        
+        <nav class="sidebar-nav">
+            <ul class="nav-list">
+                <li class="nav-item">
+                    <a href="index.html" class="nav-link">
+                        <i data-lucide="layout-dashboard"></i>
+                        <span class="nav-text">工作台</span>
+                    </a>
+                </li>
+                <li class="nav-item active">
+                    <a href="articles.html" class="nav-link">
+                        <i data-lucide="file-text"></i>
+                        <span class="nav-text">文章管理</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="materials.html" class="nav-link">
+                        <i data-lucide="image"></i>
+                        <span class="nav-text">素材库</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="todos.html" class="nav-link">
+                        <i data-lucide="check-square"></i>
+                        <span class="nav-text">待办事项</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="calendar.html" class="nav-link">
+                        <i data-lucide="calendar"></i>
+                        <span class="nav-text">发布日历</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+        
+        <div class="sidebar-footer">
+            <div class="user-info">
+                <div class="user-avatar">
+                    <span>K</span>
+                </div>
+                <div class="user-details">
+                    <span class="user-name">Kimi Claw</span>
+                    <span class="user-role">创作者</span>
+                </div>
+            </div>
+            <button class="theme-toggle" id="themeToggle" title="切换主题">
+                <i data-lucide="sun" class="theme-icon-light"></i>
+                <i data-lucide="moon" class="theme-icon-dark"></i>
+            </button>
+        </div>
+    </aside>
+
+    <!-- 主内容区 -->
+    <main class="main-content">
+        <!-- 顶部栏 -->
+        <header class="top-bar">
+            <div class="top-bar-left">
+                <button class="mobile-menu-toggle" id="mobileMenuToggle">
+                    <i data-lucide="menu"></i>
+                </button>
+                <a href="articles.html" class="back-link">
+                    <i data-lucide="arrow-left"></i>
+                    <span>返回文章列表</span>
+                </a>
+            </div>
+            <div class="top-bar-right">
+                <button class="btn btn-secondary" id="editBtn">
+                    <i data-lucide="edit-2"></i>
+                    <span>编辑</span>
+                </button>
+                <button class="btn btn-primary" id="copyBtn">
+                    <i data-lucide="copy"></i>
+                    <span>复制到公众号</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- 内容区域 -->
+        <div class="content-wrapper">
+            <div class="article-detail-layout">
+                <!-- 左侧：文章信息 -->
+                <div class="article-info-panel">
+                    <div class="info-card">
+                        <h3>文章信息</h3>
+                        <div class="info-list">
+                            <div class="info-item">
+                                <span class="info-label">状态</span>
+                                <span class="info-value" id="articleStatus">--</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">类型</span>
+                                <span class="info-value" id="articleType">--</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">发布日期</span>
+                                <span class="info-value" id="articleDate">--</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">字数</span>
+                                <span class="info-value" id="articleWords">--</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">创建时间</span>
+                                <span class="info-value" id="articleCreated">--</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="info-card">
+                        <h3>操作记录</h3>
+                        <div class="timeline">
+                            <div class="timeline-item">
+                                <div class="timeline-dot"></div>
+                                <div class="timeline-content">
+                                    <p class="timeline-title">文章创建</p>
+                                    <p class="timeline-time" id="createdTime">--</p>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-dot"></div>
+                                <div class="timeline-content">
+                                    <p class="timeline-title">最后修改</p>
+                                    <p class="timeline-time" id="updatedTime">--</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="info-card actions-card">
+                        <h3>快捷操作</h3>
+                        <div class="quick-actions">
+                            <button class="action-btn" id="downloadBtn">
+                                <i data-lucide="download"></i>
+                                <span>下载HTML</span>
+                            </button>
+                            <button class="action-btn" id="shareBtn">
+                                <i data-lucide="share-2"></i>
+                                <span>分享链接</span>
+                            </button>
+                            <button class="action-btn danger" id="deleteBtn">
+                                <i data-lucide="trash-2"></i>
+                                <span>删除文章</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 右侧：预览区域 -->
+                <div class="article-preview-panel">
+                    <div class="preview-header">
+                        <h2 class="preview-title" id="previewTitle">--</h2>
+                        <div class="preview-tabs">
+                            <button class="preview-tab active" data-tab="wechat">公众号预览</button>
+                            <button class="preview-tab" data-tab="raw">原始HTML</button>
+                        </div>
+                    </div>
+                    
+                    <div class="preview-content">
+                        <div class="wechat-preview active" id="wechatPreview">
+                            <div class="wechat-article" id="articleContent">
+                                <div class="loading-state">
+                                    <i data-lucide="loader-2" class="spin"></i>
+                                    <span>加载文章内容...</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="raw-preview" id="rawPreview">
+                            <pre class="raw-code" id="rawCode"></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 移动端遮罩 -->
+    <div class="mobile-overlay" id="mobileOverlay"></div>
+
+    <!-- 删除确认弹窗 -->
+    <div class="modal" id="deleteModal">
+        <div class="modal-overlay"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>确认删除</h3>
+                <button class="modal-close" id="closeDeleteModal">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p class="delete-warning">确定要删除这篇文章吗？此操作不可恢复。</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="cancelDelete">取消</button>
+                <button class="btn btn-danger" id="confirmDelete">确认删除</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast 通知 -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script src="app.js"></script>
+    <script src="article-detail.js"></script>
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>

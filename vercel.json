@@ -1,0 +1,44 @@
+{
+  "version": 2,
+  "name": "traffic-dashboard",
+  "builds": [
+    {
+      "src": "index.html",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "articles/**/*",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "api/**/*.js",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/articles/create",
+      "dest": "/api/articles-create.js"
+    },
+    {
+      "src": "/api/articles/update",
+      "dest": "/api/articles-update.js"
+    },
+    {
+      "src": "/api/materials",
+      "dest": "/api/materials.js"
+    },
+    {
+      "src": "/api/articles",
+      "dest": "/api/articles.js"
+    },
+    {
+      "src": "/articles/(.*)",
+      "dest": "/articles/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/$1"
+    }
+  ]
+}

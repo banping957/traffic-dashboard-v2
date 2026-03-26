@@ -1,0 +1,134 @@
+{
+  "stats": {
+    "monthlyArticles": 42,
+    "monthlyArticlesChange": 18,
+    "totalViews": "156.3K",
+    "totalViewsChange": 35,
+    "completionRate": "72%",
+    "completionRateChange": 8,
+    "materialCount": 168,
+    "materialChange": 24
+  },
+  "articles": [
+    {
+      "id": 1,
+      "title": "我和闺蜜同分不同命：她去了武大，我去了华科",
+      "type": "story",
+      "typeLabel": "人物故事",
+      "date": "2026-03-19",
+      "timeSlot": "上午",
+      "status": "published",
+      "views": 3200,
+      "likes": 186,
+      "comments": 42,
+      "wordCount": 1150,
+      "summary": "同分不同命的真实故事，武大vs华科就业数据对比",
+      "file": "2026-03-19-am-wuda-vs-huake.html"
+    },
+    {
+      "id": 2,
+      "title": "2026年就业率最高的5个专业，第1个岗位需求暴涨215%",
+      "type": "analysis",
+      "typeLabel": "专业解读",
+      "date": "2026-03-19",
+      "timeSlot": "下午",
+      "status": "published",
+      "views": 5800,
+      "likes": 324,
+      "comments": 89,
+      "wordCount": 1180,
+      "summary": "AI时代新工科风口，具身智能年薪33万+",
+      "file": "2026-03-19-pm-top5-majors.html"
+    },
+    {
+      "id": 3,
+      "title": "杜伦超越牛剑！2026英国大学排名32年来最大变局",
+      "type": "analysis",
+      "typeLabel": "专业解读",
+      "date": "2026-03-16",
+      "timeSlot": "上午",
+      "status": "published",
+      "views": 8500,
+      "likes": 512,
+      "comments": 127,
+      "wordCount": 1100,
+      "summary": "TIMES 2026排名解读，杜伦首次进前三",
+      "file": "2026-03-16-durham-ranking.html"
+    },
+    {
+      "id": 4,
+      "title": "2026中国大学排名出炉：北航第9、南开进前7，最大黑马是它",
+      "type": "analysis",
+      "typeLabel": "专业解读",
+      "date": "2026-03-16",
+      "timeSlot": "下午",
+      "status": "published",
+      "views": 12300,
+      "likes": 896,
+      "comments": 234,
+      "wordCount": 1050,
+      "summary": "ABC 2026排名，福耀科大首次入榜即进50强",
+      "file": "2026-03-16-china-ranking.html"
+    },
+    {
+      "id": 5,
+      "title": "我研究了3000份招聘JD，发现这5个专业正在被AI"活埋"",
+      "type": "analysis",
+      "typeLabel": "专业解读",
+      "date": "2026-03-18",
+      "timeSlot": "上午",
+      "status": "published",
+      "views": 9200,
+      "likes": 567,
+      "comments": 156,
+      "wordCount": 1180,
+      "summary": "2026年就业预警，这些专业需谨慎选择",
+      "file": "2026-03-18-am-5-worst-majors-fixed.html"
+    },
+    {
+      "id": 6,
+      "title": "采访了100个年薪50万+的985生，他们大学都偷偷做了一件事",
+      "type": "story",
+      "typeLabel": "人物故事",
+      "date": "2026-03-18",
+      "timeSlot": "下午",
+      "status": "published",
+      "views": 7600,
+      "likes": 445,
+      "comments": 98,
+      "wordCount": 1150,
+      "summary": "高薪毕业生的共同特征调研",
+      "file": "2026-03-18-pm-985-graduates-research.html"
+    }
+  ],
+  "todos": [
+    {"id": 1, "text": "上午文章创作（人物故事）", "completed": true, "date": "2026-03-19"},
+    {"id": 2, "text": "下午文章创作（专业解读）", "completed": true, "date": "2026-03-19"},
+    {"id": 3, "text": "配图素材准备", "completed": true, "date": "2026-03-19"},
+    {"id": 4, "text": "格式检查与优化", "completed": true, "date": "2026-03-19"},
+    {"id": 5, "text": "邮件发送交付", "completed": true, "date": "2026-03-19"},
+    {"id": 6, "text": "数据复盘与优化", "completed": true, "date": "2026-03-19"},
+    {"id": 7, "text": "明日选题确定", "completed": false, "date": "2026-03-19"}
+  ],
+  "materials": [
+    {"id": 1, "name": "大学排名数据", "type": "data", "icon": "📊", "count": 15},
+    {"id": 2, "name": "就业薪资报告", "type": "data", "icon": "💰", "count": 12},
+    {"id": 3, "name": "校园风景图", "type": "image", "icon": "🏫", "count": 52},
+    {"id": 4, "name": "人物素材", "type": "image", "icon": "👥", "count": 28},
+    {"id": 5, "name": "标题模板", "type": "text", "icon": "📝", "count": 18},
+    {"id": 6, "name": "SOP文档", "type": "text", "icon": "📋", "count": 6},
+    {"id": 7, "name": "已发布文章", "type": "file", "icon": "📄", "count": 6}
+  ],
+  "calendar": {
+    "currentMonth": "2026-03",
+    "publishedDates": ["14", "15", "16", "17", "18", "19"]
+  },
+  "planProgress": {
+    "totalDays": 30,
+    "completedDays": 19,
+    "totalArticles": 42,
+    "targetArticles": 60,
+    "currentPhase": "第一阶段",
+    "phaseProgress": 70
+  }
+}

@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>发布日历 - OpenClaw</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="calendar.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+</head>
+<body>
+    <!-- 侧边导航栏 -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <i data-lucide="feather" class="logo-icon"></i>
+                <span class="logo-text">OpenClaw</span>
+            </div>
+            <button class="sidebar-toggle" id="sidebarToggle">
+                <i data-lucide="chevron-left"></i>
+            </button>
+        </div>
+        
+        <nav class="sidebar-nav">
+            <ul class="nav-list">
+                <li class="nav-item">
+                    <a href="index.html" class="nav-link">
+                        <i data-lucide="layout-dashboard"></i>
+                        <span class="nav-text">工作台</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="articles.html" class="nav-link">
+                        <i data-lucide="file-text"></i>
+                        <span class="nav-text">文章管理</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="materials.html" class="nav-link">
+                        <i data-lucide="image"></i>
+                        <span class="nav-text">素材库</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="todos.html" class="nav-link">
+                        <i data-lucide="check-square"></i>
+                        <span class="nav-text">待办事项</span>
+                    </a>
+                </li>
+                <li class="nav-item active">
+                    <a href="calendar.html" class="nav-link">
+                        <i data-lucide="calendar"></i>
+                        <span class="nav-text">发布日历</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+        
+        <div class="sidebar-footer">
+            <div class="user-info">
+                <div class="user-avatar">
+                    <span>K</span>
+                </div>
+                <div class="user-details">
+                    <span class="user-name">Kimi Claw</span>
+                    <span class="user-role">创作者</span>
+                </div>
+            </div>
+            <button class="theme-toggle" id="themeToggle" title="切换主题">
+                <i data-lucide="sun" class="theme-icon-light"></i>
+                <i data-lucide="moon" class="theme-icon-dark"></i>
+            </button>
+        </div>
+    </aside>
+
+    <!-- 主内容区 -->
+    <main class="main-content">
+        <!-- 顶部栏 -->
+        <header class="top-bar">
+            <div class="top-bar-left">
+                <button class="mobile-menu-toggle" id="mobileMenuToggle">
+                    <i data-lucide="menu"></i>
+                </button>
+                <h1 class="page-title">发布日历</h1>
+            </div>
+            <div class="top-bar-right">
+                <div class="calendar-nav">
+                    <button class="btn btn-icon" id="prevMonth">
+                        <i data-lucide="chevron-left"></i>
+                    </button>
+                    <span class="calendar-title" id="calendarTitle">2026年3月</span>
+                    <button class="btn btn-icon" id="nextMonth">
+                        <i data-lucide="chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- 内容区域 -->
+        <div class="content-wrapper">
+            <!-- 日历网格 -->
+            <section class="calendar-section">
+                <div class="calendar-header">
+                    <div class="weekday">日</div>
+                    <div class="weekday">一</div>
+                    <div class="weekday">二</div>
+                    <div class="weekday">三</div>
+                    <div class="weekday">四</div>
+                    <div class="weekday">五</div>
+                    <div class="weekday">六</div>
+                </div>
+                <div class="calendar-grid" id="calendarGrid">
+                    <!-- 日历内容由JS生成 -->
+                </div>
+            </section>
+
+            <!-- 图例 -->
+            <section class="calendar-legend">
+                <div class="legend-item">
+                    <span class="legend-dot story"></span>
+                    <span>人物故事</span>
+                </div>
+                <div class="legend-item">
+                    <span class="legend-dot analysis"></span>
+                    <span>专业解读</span>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- 移动端遮罩 -->
+    <div class="mobile-overlay" id="mobileOverlay"></div>
+
+    <!-- 日期详情弹窗 -->
+    <div class="modal" id="dateDetailModal">
+        <div class="modal-overlay"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="detailDate">3月26日</h3>
+                <button class="modal-close" id="closeDetailModal">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="date-articles" id="dateArticles">
+                    <!-- 文章列表由JS生成 -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" id="addArticleToDate">
+                    <i data-lucide="plus"></i>
+                    <span>添加文章</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast 通知 -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script src="app.js"></script>
+    <script src="calendar.js"></script>
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>
