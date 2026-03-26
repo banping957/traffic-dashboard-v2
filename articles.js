@@ -221,13 +221,16 @@ const ArticlesPage = {
 
         } catch (error) {
             console.error('加载文章失败:', error);
-            // 使用模拟数据
-            this.articles = this.getMockArticles();
-            this.totalArticles = 156;
-            document.getElementById('articleCount').textContent = '156';
-            document.getElementById('totalArticles').textContent = '156';
-            this.renderArticles();
-            this.renderPagination();
+            // 显示错误信息
+            grid.innerHTML = `
+                <div class="empty-state" style="grid-column: 1/-1; color: #ef4444;">
+                    <i data-lucide="alert-circle"></i>
+                    <p>加载失败: ${error.message || '未知错误'}</p>
+                    <p style="font-size: 12px; color: #666;">请检查网络连接或刷新页面</p>
+                </div>
+            `;
+            document.getElementById('articleCount').textContent = '0';
+            document.getElementById('totalArticles').textContent = '0';
         }
 
         // 重新初始化图标
