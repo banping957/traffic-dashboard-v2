@@ -73,6 +73,15 @@ const ArticleDetailPage = {
         document.querySelector('#deleteModal .modal-overlay')?.addEventListener('click', () => {
             this.hideDeleteModal();
         });
+
+        // 多平台发布
+        document.getElementById('previewTransformBtn')?.addEventListener('click', () => {
+            this.previewPlatformTransform();
+        });
+
+        document.getElementById('publishMultiBtn')?.addEventListener('click', () => {
+            this.publishToPlatforms();
+        });
     },
 
     async loadArticle() {
@@ -144,6 +153,9 @@ const ArticleDetailPage = {
         // 更新时间线
         document.getElementById('createdTime').textContent = this.formatDateTime(article.created_at);
         document.getElementById('updatedTime').textContent = this.formatDateTime(article.updated_at || article.created_at);
+
+        // 加载平台列表
+        this.loadPlatforms();
 
         // 更新预览内容
         const content = article.content || article.html || '<p>暂无内容</p>';
@@ -287,6 +299,273 @@ ${this.article.content}
         div.textContent = html;
         return div.innerHTML;
     },
+
+    // ========================================
+    // 多平台发布功能
+    // ========================================
+
+    platforms: [],
+    selectedPlatforms: [],
+
+    async loadPlatforms() {
+        try {
+            const SUPABASE_URL = 'https://vysmewebafmoaatsqxtc.supabase.co';
+            const SUPABASE_KEY = 'sb_publishable_iiTKpO8PmynFxiV74Oq-KA_FBugqEo0';
+            
+            const response = await fetch(`${SUPABASE_URL}/rest/v1/platforms?select=*&order=priority.asc`, {
+                headers: {
+                    'apikey': SUPABASE_KEY,
+                    'Authorization': `Bearer ${SUPABASE_KEY}`
+                }
+            });
+            
+            if (!response.ok) throw new Error('Failed to load platforms');
+            
+            this.platforms = await response.json();
+            this.renderPlatformList();
+        } catch (error) {
+            console.error('加载平台失败:', error);
+            document.getElementById('platformList').innerHTML = `
+                <div class="empty-state">加载平台失败</div>
+            `;
+        }
+    },
+
+    renderPlatformList() {
+        const container = document.getElementById('platformList');
+        if (!container) return;
+
+        if (this.platforms.length === 0) {
+            container.innerHTML = '<div class="empty-state">暂无平台配置</div>';
+            return;
+        }
+
+        const platformIcons = {
+            'wechat_mp': '💬',
+            'xiaohongshu': '📕',
+            'douyin': '🎵',
+            'bilibili': '📺',
+            'zhihu': '❓',
+            'weibo': '🌐'
+        };
+
+        container.innerHTML = this.platforms.map(platform => {
+            const isDisabled = !platform.is_active || !platform.is_configured;
+            const statusText = platform.is_configured 
+                ? (platform.is_active ? '已启用' : '已禁用')
+                : '未配置';
+            
+            return `
+                <div class="platform-item ${isDisabled ? 'disabled' : ''}" data-platform="${platform.id}">
+                    <div class="platform-icon">${platformIcons[platform.id] || '📱'}</div>
+                    <div class="platform-info">
+                        <span class="platform-name">${platform.name}</span>
+                        <span class="platform-status">${statusText}</span>
+                    </div>
+                    <input type="checkbox" 
+                           class="platform-checkbox" 
+                           data-platform="${platform.id}"
+                           ${isDisabled ? 'disabled' : ''}
+                           ${platform.id === 'wechat_mp' ? 'checked' : ''}>
+                </div>
+            `;
+        }).join('');
+
+        // 绑定复选框事件
+        container.querySelectorAll('.platform-checkbox').forEach(checkbox => {
+            checkbox.addEventListener('change', (e) => {
+                const platformId = e.target.dataset.platform;
+                if (e.target.checked) {
+                    this.selectedPlatforms.push(platformId);
+                } else {
+                    this.selectedPlatforms = this.selectedPlatforms.filter(id => id !== platformId);
+                }
+            });
+        });
+
+        // 默认选中公众号
+        this.selectedPlatforms = ['wechat_mp'];
+    },
+
+    // 内容转换器
+    transformContent(content, platformId) {
+        const transformers = {
+            'wechat_mp': (c) => ({
+                title: c.title,
+                body: c.summary,
+                formatted_body: c.content,
+                tags: [c.type],
+                extras: { author: 'OpenClaw', digest: c.summary }
+            }),
+            'xiaohongshu': (c) => {
+                const plainText = c.content?.replace(/<[^>]*>/g, '') || c.summary;
+                return {
+                    title: c.title?.slice(0, 20),
+                    body: `📖 ${c.summary}\n\n${plainText.slice(0, 800)}\n\n💡 关注我，了解更多教育资讯！`,
+                    formatted_body: plainText,
+                    tags: ['教育', '高考', '大学'],
+                    extras: { topic_tags: ['#教育', '#高考'] }
+                };
+            },
+            'douyin': (c) => {
+                const plainText = c.content?.replace(/<[^>]*>/g, '') || c.summary;
+                const script = `🔥 ${c.title}\n\n开头钩子（3秒）：${c.summary?.slice(0, 50)}\n\n正文（60秒）：${plainText.slice(0, 300)}\n\n结尾（5秒）：关注我，下期更精彩！`;
+                return {
+                    title: c.title?.slice(0, 55),
+                    body: script,
+                    formatted_body: script,
+                    tags: ['教育', '知识分享'],
+                    extras: { video_script: script }
+                };
+            },
+            'bilibili': (c) => {
+                const plainText = c.content?.replace(/<[^>]*>/g, '') || c.summary;
+                return {
+                    title: `【干货】${c.title}`.slice(0, 80),
+                    body: `${c.summary}\n\n${plainText.slice(0, 1500)}\n\n🏷️ 如果觉得有用，请一键三连支持！`,
+                    formatted_body: c.content,
+                    tags: ['知识', '教育'],
+                    extras: { copyright: '原创' }
+                };
+            },
+            'zhihu': (c) => {
+                const plainText = c.content?.replace(/<[^>]*>/g, '') || c.summary;
+                return {
+                    title: c.title,
+                    body: `## ${c.title}\n\n${plainText}\n\n---\n\n**相关话题：** #教育 #高考`,
+                    formatted_body: c.content,
+                    tags: ['教育', '高考'],
+                    extras: { format: 'markdown' }
+                };
+            }
+        };
+
+        const transformer = transformers[platformId];
+        return transformer ? transformer(content) : null;
+    },
+
+    previewPlatformTransform() {
+        if (!this.article) {
+            ToastManager.warning('文章尚未加载');
+            return;
+        }
+
+        const checkboxes = document.querySelectorAll('.platform-checkbox:checked');
+        if (checkboxes.length === 0) {
+            ToastManager.warning('请至少选择一个平台');
+            return;
+        }
+
+        const selectedIds = Array.from(checkboxes).map(cb => cb.dataset.platform);
+        const previews = selectedIds.map(id => {
+            const platform = this.platforms.find(p => p.id === id);
+            const transformed = this.transformContent(this.article, id);
+            return { platformId: id, platformName: platform?.name, ...transformed };
+        }).filter(p => p !== null);
+
+        this.showPreviewModal(previews);
+    },
+
+    showPreviewModal(previews) {
+        const modal = document.createElement('div');
+        modal.className = 'modal active';
+        modal.innerHTML = `
+            <div class="modal-overlay"></div>
+            <div class="modal-content platform-preview-modal">
+                <div class="modal-header">
+                    <h3>📱 平台内容预览</h3>
+                    <button class="modal-close" onclick="this.closest('.modal').remove()">
+                        <i data-lucide="x"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="platform-tabs">
+                        ${previews.map((p, i) => `
+                            <button class="tab-btn ${i === 0 ? 'active' : ''}" data-tab="${p.platformId}"
+                                    onclick="this.closest('.modal').querySelectorAll('.tab-btn').forEach(t=>t.classList.remove('active'));this.classList.add('active');this.closest('.modal').querySelectorAll('.platform-content').forEach(c=>c.classList.remove('active'));this.closest('.modal').querySelector('[data-content=\'${p.platformId}\']').classList.add('active');">
+                                ${p.platformName}
+                            </button>
+                        `).join('')}
+                    </div>
+                    <div class="platform-contents">
+                        ${previews.map((p, i) => `
+                            <div class="platform-content ${i === 0 ? 'active' : ''}" data-content="${p.platformId}">
+                                <div class="preview-section">
+                                    <label>标题</label>
+                                    <div class="preview-title">${p.title}</div>
+                                </div>
+                                <div class="preview-section">
+                                    <label>内容</label>
+                                    <pre class="preview-body">${p.body}</pre>
+                                </div>
+                                <div class="preview-section">
+                                    <label>标签</label>
+                                    <div class="preview-tags">${p.tags?.join(', ') || '无'}</div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(modal);
+        lucide.createIcons();
+    },
+
+    async publishToPlatforms() {
+        if (!this.article) {
+            ToastManager.warning('文章尚未加载');
+            return;
+        }
+
+        const checkboxes = document.querySelectorAll('.platform-checkbox:checked');
+        if (checkboxes.length === 0) {
+            ToastManager.warning('请至少选择一个平台');
+            return;
+        }
+
+        const selectedIds = Array.from(checkboxes).map(cb => cb.dataset.platform);
+        
+        // 保存转换后的内容到数据库
+        const SUPABASE_URL = 'https://vysmewebafmoaatsqxtc.supabase.co';
+        const SUPABASE_KEY = 'sb_publishable_iiTKpO8PmynFxiV74Oq-KA_FBugqEo0';
+
+        ToastManager.success(`正在准备发布到 ${selectedIds.length} 个平台...`);
+
+        for (const platformId of selectedIds) {
+            const transformed = this.transformContent(this.article, platformId);
+            if (!transformed) continue;
+
+            try {
+                const response = await fetch(`${SUPABASE_URL}/rest/v1/platform_contents`, {
+                    method: 'POST',
+                    headers: {
+                        'apikey': SUPABASE_KEY,
+                        'Authorization': `Bearer ${SUPABASE_KEY}`,
+                        'Content-Type': 'application/json',
+                        'Prefer': 'resolution=merge-duplicates'
+                    },
+                    body: JSON.stringify({
+                        content_id: parseInt(this.articleId),
+                        platform_id: platformId,
+                        title: transformed.title,
+                        body: transformed.body,
+                        formatted_body: transformed.formatted_body,
+                        tags: transformed.tags,
+                        extras: transformed.extras,
+                        transform_status: 'success'
+                    })
+                });
+
+                if (!response.ok) throw new Error(`Failed to save ${platformId}`);
+            } catch (error) {
+                console.error(`保存 ${platformId} 失败:`, error);
+            }
+        }
+
+        ToastManager.success('内容已转换并保存，请手动发布到各平台');
+        this.previewPlatformTransform();
+    }
 
     getMockArticle() {
         return {
