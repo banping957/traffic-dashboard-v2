@@ -565,7 +565,7 @@ ${this.article.content}
 
         ToastManager.success('内容已转换并保存，请手动发布到各平台');
         this.previewPlatformTransform();
-    }
+    },
 
     getMockArticle() {
         return {
