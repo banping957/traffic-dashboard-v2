@@ -147,7 +147,7 @@ const ArticleDetailPage = {
         document.getElementById('articleType').textContent = typeText;
 
         document.getElementById('articleDate').textContent = article.date || '--';
-        document.getElementById('articleWords').textContent = `${article.word_count || 0} 字`;
+        document.getElementById('articleWords').textContent = `${article.wordcount || article.word_count || 0} 字`;
         document.getElementById('articleCreated').textContent = this.formatDate(article.created_at);
 
         // 更新时间线
