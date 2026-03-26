@@ -77,15 +77,24 @@ const ArticleDetailPage = {
 
     async loadArticle() {
         try {
-            const { data: article, error } = await supabase
-                .from('articles')
-                .select('*')
-                .eq('id', this.articleId)
-                .single();
-
-            if (error) throw error;
-
-            if (!article) {
+            // 使用 REST API 直接获取数据
+            const SUPABASE_URL = 'https://vysmewebafmoaatsqxtc.supabase.co';
+            const SUPABASE_KEY = 'sb_publishable_iiTKpO8PmynFxiV74Oq-KA_FBugqEo0';
+            
+            const response = await fetch(`${SUPABASE_URL}/rest/v1/articles?id=eq.${this.articleId}&select=*`, {
+                headers: {
+                    'apikey': SUPABASE_KEY,
+                    'Authorization': `Bearer ${SUPABASE_KEY}`
+                }
+            });
+            
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            }
+            
+            const data = await response.json();
+            
+            if (!data || data.length === 0) {
                 ToastManager.error('文章不存在');
                 setTimeout(() => {
                     window.location.href = 'articles.html';
@@ -93,14 +102,18 @@ const ArticleDetailPage = {
                 return;
             }
 
-            this.article = article;
+            this.article = data[0];
             this.renderArticle();
 
         } catch (error) {
             console.error('加载文章失败:', error);
-            // 使用模拟数据
-            this.article = this.getMockArticle();
-            this.renderArticle();
+            // 显示错误信息
+            document.getElementById('articleContent').innerHTML = `
+                <div style="text-align: center; padding: 40px; color: #ef4444;">
+                    <p>加载文章失败: ${error.message || '未知错误'}</p>
+                    <p style="font-size: 14px; color: #666;">请检查网络连接或刷新页面</p>
+                </div>
+            `;
         }
     },
 
@@ -224,12 +237,20 @@ ${this.article.content}
 
     async confirmDelete() {
         try {
-            const { error } = await supabase
-                .from('articles')
-                .delete()
-                .eq('id', this.articleId);
-
-            if (error) throw error;
+            const SUPABASE_URL = 'https://vysmewebafmoaatsqxtc.supabase.co';
+            const SUPABASE_KEY = 'sb_publishable_iiTKpO8PmynFxiV74Oq-KA_FBugqEo0';
+            
+            const response = await fetch(`${SUPABASE_URL}/rest/v1/articles?id=eq.${this.articleId}`, {
+                method: 'DELETE',
+                headers: {
+                    'apikey': SUPABASE_KEY,
+                    'Authorization': `Bearer ${SUPABASE_KEY}`
+                }
+            });
+            
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            }
 
             ToastManager.success('文章已删除');
             setTimeout(() => {
@@ -238,7 +259,7 @@ ${this.article.content}
 
         } catch (error) {
             console.error('删除失败:', error);
-            ToastManager.error('删除失败');
+            ToastManager.error('删除失败: ' + error.message);
             this.hideDeleteModal();
         }
     },
