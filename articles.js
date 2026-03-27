@@ -512,10 +512,58 @@ const ArticlesPage = {
         ToastManager.info('编辑功能开发中...');
     },
 
-    deleteArticle(id) {
+    async deleteArticle(id) {
         if (confirm('确定要删除这篇文章吗？')) {
-            ToastManager.success('文章已删除');
-            this.loadArticles();
+            try {
+                const response = await fetch(`${this.SUPABASE_URL}/rest/v1/articles?id=eq.${id}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'apikey': this.SUPABASE_KEY,
+                        'Authorization': `Bearer ${this.SUPABASE_KEY}`
+                    }
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+                
+                ToastManager.success('文章已删除');
+                this.loadArticles();
+            } catch (error) {
+                console.error('删除文章失败:', error);
+                ToastManager.error('删除失败: ' + error.message);
+            }
+        }
+    },
+    
+    async batchDelete() {
+        if (this.selectedIds.size === 0) {
+            ToastManager.warning('请先选择要删除的文章');
+            return;
+        }
+        
+        if (confirm(`确定要删除选中的 ${this.selectedIds.size} 篇文章吗？`)) {
+            try {
+                const ids = Array.from(this.selectedIds).join(',');
+                const response = await fetch(`${this.SUPABASE_URL}/rest/v1/articles?id=in.(${ids})`, {
+                    method: 'DELETE',
+                    headers: {
+                        'apikey': this.SUPABASE_KEY,
+                        'Authorization': `Bearer ${this.SUPABASE_KEY}`
+                    }
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+                
+                ToastManager.success(`已删除 ${this.selectedIds.size} 篇文章`);
+                this.selectedIds.clear();
+                this.loadArticles();
+            } catch (error) {
+                console.error('批量删除失败:', error);
+                ToastManager.error('批量删除失败: ' + error.message);
+            }
         }
     }
 };
