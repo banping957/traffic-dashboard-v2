@@ -13,31 +13,31 @@ const path = require('path');
 const SUPABASE_URL = 'https://vysmewebafmoaatsqxtc.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_iiTKpO8PmynFxiV74Oq-KA_FBugqEo0';
 
-const articlesDir = '/root/.openclaw/workspace/articles';
+const articlesDir = '/root/.openclaw/workspace/ui/traffic-dashboard/articles';
 
 // ==========================================
 // 每天修改这里的文章配置即可
 // ==========================================
 const articles = [
   {
-    title: "2026泰晤士世界大学排名发布：牛津十连冠，中国7校进前100",
-    type: "analysis",        // story:人物故事, analysis:专业解读
-    typelabel: "专业解读",    // 人物故事 / 专业解读
-    date: "2026-03-26",      // 发布日期
-    timeslot: "上午",        // 上午 / 下午
-    summary: "牛津大学连续10年蝉联全球第一，中国内地7所高校进入全球前100，清华大学稳居亚洲榜首。全球高等教育格局正在悄然转移。",
-    wordcount: 1100,         // 字数
-    file: "2026-03-26-am-times-ranking.html"  // 文件名
+    title: "QS 2026世界大学排名出炉：MIT连续14年霸榜，斯坦福反超进前三",
+    type: "analysis",
+    typelabel: "专业解读",
+    date: "2026-03-27",
+    timeslot: "上午",
+    summary: "2026年QS世界大学排名正式发布。MIT连续第14年蝉联全球第一，创历史最长连冠纪录。斯坦福从第6跃升至第3，成为Top10中最大黑马。中国高校持续崛起，5所港校进入全球前100。",
+    wordcount: 1150,
+    file: "2026-03-27-am-qs-ranking.html"
   },
   {
-    title: "从'解题'到'解决问题'：2026高考改革，刷题党正在被淘汰",
+    title: "从专科到研究生：一个退伍兵的四级跳逆袭之路",
     type: "story",
     typelabel: "人物故事",
-    date: "2026-03-26",
+    date: "2026-03-27",
     timeslot: "下午",
-    summary: "2026年教育部1号文件发布，高考命题从'解题'转向'解决问题'。林浩的故事告诉你，为什么刷题时代正在终结。",
-    wordcount: 1150,
-    file: "2026-03-26-pm-gaokao-reform.html"
+    summary: "2016年，他是一名专科生；2018年，他穿上军装；2020年，他退伍复学；2022年，他专升本成功；2024年，他考取研究生。8年时间，从专科到硕士，他用四级跳完成了人生的逆袭。",
+    wordcount: 1100,
+    file: "2026-03-27-pm-veteran-story.html"
   }
 ];
 // ==========================================
