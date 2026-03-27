@@ -8,8 +8,18 @@ console.log('app.js loaded');
 const SUPABASE_URL = 'https://vysmewebafmoaatsqxtc.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_iiTKpO8PmynFxiV74Oq-KA_FBugqEo0';
 
-// 初始化 Supabase
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+// 初始化 Supabase（添加错误处理）
+let supabase;
+try {
+    if (window.supabase) {
+        supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        console.log('Supabase initialized');
+    } else {
+        console.error('Supabase library not loaded');
+    }
+} catch (e) {
+    console.error('Supabase init error:', e);
+}
 
 /**
  * Toast 通知管理器
