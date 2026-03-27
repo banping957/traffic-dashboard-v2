@@ -308,6 +308,23 @@
 
     <script src="app.js"></script>
     <script>
+        // 诊断脚本
+        console.log('=== DIAGNOSTIC ===');
+        console.log('typeof ArticleManager:', typeof ArticleManager);
+        console.log('typeof supabase:', typeof supabase);
+        console.log('recentArticles element:', document.getElementById('recentArticles'));
+        
+        // 直接测试API
+        fetch('https://vysmewebafmoaatsqxtc.supabase.co/rest/v1/articles?select=*&order=date.desc&limit=5', {
+            headers: {
+                'apikey': 'sb_publishable_iiTKpO8PmynFxiV74Oq-KA_FBugqEo0',
+                'Authorization': 'Bearer sb_publishable_iiTKpO8PmynFxiV74Oq-KA_FBugqEo0'
+            }
+        })
+        .then(r => r.json())
+        .then(data => console.log('API test:', data.length, 'articles'))
+        .catch(e => console.error('API error:', e));
+        
         // 初始化图标
         lucide.createIcons();
     </script>
